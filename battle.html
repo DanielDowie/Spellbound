@@ -1,10 +1,10 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spellbound Online Battle</title></head><body style="background:#110d27;color:#fff;text-align:center;font-family:system-ui"><p>Loading Spellbound battle…</p><script>
 (async()=>{try{
 const r=await fetch('./index.html',{cache:'no-store'});if(!r.ok)throw Error('Game unavailable');
-let html=await r.text();
+let html=await r.text(); const bridgeResponse=await fetch('./online-bridge.js',{cache:'no-store'});if(!bridgeResponse.ok)throw Error('Multiplayer connection unavailable');const bridgeCode=await bridgeResponse.text();
 const seedScript='<script>\n(function(){let s=0;const id=new URLSearchParams(location.search).get("match")||"";for(const c of id)s=(Math.imul(s,31)+c.charCodeAt(0))>>>0;Math.random=function(){s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296};})();\n</scr'+'ipt>';
 html=html.replace('<script>',seedScript+'<script>');
-html=html.replace(/<\/body>/i,'<script src="./online-bridge.js"></scr'+'ipt></body>');
+html=html.replace(/<\/script>/i, '\n'+bridgeCode+'\n</scr'+'ipt>');
 document.open();document.write(html);document.close();
 }catch(e){document.body.textContent='Could not load battle: '+e.message}})();
 </script></body></html>
